@@ -1,0 +1,60 @@
+# 200 OK
+GET http://{{host}}/api/getAllBooks
+Content-Type: application/json
+
+###
+# 201 Created or 409 Conflict if repeated with same values for combination (title, author)
+POST http://{{host}}/api/addBook
+Content-Type: application/json
+
+{"title":"The Adventures of Sherlock Holmes",
+  "author":"Arthur Conan Doyle",
+  "publisher":"Chiltern Publishing",
+  "publish_date":"2020-01-01T00:00:00Z",
+  "rating":3,"status":false}
+
+> {%
+    client.global.set("book_id", response.body);
+%}
+###
+# 200 OK
+GET http://{{host}}/api/main/getBook/{{book_id}}
+Content-Type: application/json
+
+###
+# 202 Accepted
+POST http://{{host}}/api/editBook/{{book_id}}
+Content-Type: application/json
+
+{"publish_date":"2020-01-03T00:00:00Z"}
+
+###
+# 202 Accepted
+POST http://{{host}}/api/deleteBook/{{book_id}}
+Content-Type: application/json
+
+###
+# 204 No Content
+GET http://{{host}}/api/main/getBook/{{book_id}}
+Content-Type: application/json
+
+###
+
+
+
+# 404 Not Found
+GET http://{{host}}/api/getAllBlocks
+Content-Type: application/json
+
+###
+# 400 Bad Request
+POST http://{{host}}/api/addBook
+Content-Type: application/json
+
+{"title":97676,"author":"Arthur Conan Doyle","publisher":"Chiltern Publishing","publish_date":"2020-01-01T00:00:00Z"}
+
+> {%
+    client.global.set("book_id", response.body);
+%}
+###
+
